@@ -36,6 +36,29 @@ async function run() {
             res.send(allStudent)
         })
 
+        app.put('/allStudents/', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user?.email }
+            const option = { upsert: true }
+            const updateProfile = {
+                $set: {
+                    firstName: user?.firstName,
+                    middleName: user?.middleName,
+                    lastName: user?.lastName,
+                    Division: user?.Division,
+                    LandMark: user?.LandMark,
+                    SelectClass: user?.SelectClass,
+                    addressLine1: user?.addressLine1,
+                    addressLine2: user?.addressLine2,
+                    city: user?.city,
+                    pin: user?.pin,
+                    number: user?.number,
+                }
+            }
+            const result = await addStudentCollection.updateOne(filter, updateProfile, option)
+            res.send(result)
+        })
+
         app.get('/allStudents/:id', async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
